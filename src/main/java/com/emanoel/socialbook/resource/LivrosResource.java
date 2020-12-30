@@ -3,12 +3,12 @@ package com.emanoel.socialbook.resource;
 import com.emanoel.socialbook.domain.Livro;
 import com.emanoel.socialbook.repository.LivrosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.xml.ws.Response;
 import java.net.URI;
 import java.util.List;
 
@@ -19,8 +19,8 @@ public class LivrosResource {
     private LivrosRepository livrosRepository;
 
     @RequestMapping (method = RequestMethod.GET)
-    public List<Livro> listar(){
-        return livrosRepository.findAll();
+    public ResponseEntity<List<Livro>> listar() {
+        return ResponseEntity.status(HttpStatus.OK).body(livrosRepository.findAll());
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -42,7 +42,6 @@ public class LivrosResource {
         // ResponseEntity é um objeto que encapsula o nosso objeto de retorno, e tbm permite manipular informações do HTTP
         // Como manipular o código de respostas, por exemplo
         // A interrogação significa que ele pode encapsular qualquer tipo de objeto
-        System.out.println(livro);
         if(livro == null){
             return ResponseEntity.notFound().build();
         }
@@ -51,16 +50,23 @@ public class LivrosResource {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public void deletar(@PathVariable("id") Long id){
-        Livro livro = new Livro();
-        livro.setId(id);
-        livrosRepository.delete(livro);
+    public ResponseEntity<Void> deletar(@PathVariable("id") Long id){
+        try {
+            Livro livro = new Livro();
+            livro.setId(id);
+            livrosRepository.delete(livro);
+        }catch (EmptyResultDataAccessException e){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.noContent().build();
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public void atualizar(@RequestBody Livro livro, @PathVariable("id") Long id){
+    public ResponseEntity<Void> atualizar(@RequestBody Livro livro, @PathVariable("id") Long id){
         livro.setId(id); // garantir que quem vai ser atualizado é o recurso do ID desejado
         livrosRepository.save(livro); //  se ja existe no banco, o metodo save atualizada, se nao, ele cria
+
+        return ResponseEntity.noContent().build();
     }
 
 }
