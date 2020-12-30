@@ -6,7 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.xml.ws.Response;
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -21,10 +24,16 @@ public class LivrosResource {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public void salvar(@RequestBody Livro livro){
+    public ResponseEntity<Void> salvar(@RequestBody Livro livro){
         // RequestBody é pra dizer que deve ser pego as informacoes na requisicao e coloca ela dentro do parametro
         // Se ele nao for colocado, nao é possivel obter as informacoes do objeto livro
-        livrosRepository.save(livro);
+        livro = livrosRepository.save(livro);
+
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}").buildAndExpand(livro.getId()).toUri();
+
+        // o void dentro de ResponseEntity indica que ele nao vai retornar nenhum corpo
+        return ResponseEntity.created(uri).build(); // retorna a resposta com o formato 'created' pra indicar que um recurso foi criado com o POST
     }
 
     @RequestMapping (value = "/{id}", method = RequestMethod.GET)
