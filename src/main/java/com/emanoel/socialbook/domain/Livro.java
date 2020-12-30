@@ -16,6 +16,8 @@ public class Livro {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String nome;
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String autor;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Date publicacao;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String editora;
@@ -33,9 +35,10 @@ public class Livro {
         this.nome = nome;
     }
 
-    public Livro(Long id, String nome, Date publicacao, String editora, String resumo, List<Comentario> comentarios) {
+    public Livro(Long id, String nome, String autor, Date publicacao, String editora, String resumo, List<Comentario> comentarios) {
         this.id = id;
         this.nome = nome;
+        this.autor = autor;
         this.publicacao = publicacao;
         this.editora = editora;
         this.resumo = resumo;
@@ -56,6 +59,14 @@ public class Livro {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public String getAutor() {
+        return autor;
+    }
+
+    public void setAutor(String autor) {
+        this.autor = autor;
     }
 
     public Date getPublicacao() {
