@@ -16,7 +16,7 @@ public class Comentario {
     private Date data;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "LIVRO_ID")
-    @JsonIgnore // para evitar estouro de pilha. A partir de um livro e posso chegar nos comentarios, mas nao o contrario
+    @JsonIgnore // para evitar estouro de pilha. A partir de um livro e possível chegar nos comentarios, mas nao o contrario
     private Livro livro;
 
     public Long getId() {
