@@ -2,7 +2,6 @@ package com.emanoel.socialbook.resource;
 
 import com.emanoel.socialbook.domain.Livro;
 import com.emanoel.socialbook.services.LivroService;
-import com.emanoel.socialbook.services.exceptions.LivroNaoEncontradoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,12 +37,7 @@ public class LivrosResource {
 
     @RequestMapping (value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<?> buscar(@PathVariable("id") Long id){
-        Livro livro;
-        try{
-            livro = livrosService.buscar(id);
-        }catch (LivroNaoEncontradoException e){
-            return ResponseEntity.notFound().build();
-        }
+        Livro livro = livrosService.buscar(id);
         // ResponseEntity é um objeto que encapsula o nosso objeto de retorno, e tbm permite manipular informações do HTTP
         // Como manipular o código de respostas, por exemplo
         // A interrogação significa que ele pode encapsular qualquer tipo de objeto
@@ -52,24 +46,14 @@ public class LivrosResource {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<Void> deletar(@PathVariable("id") Long id){
-        try {
-            Livro livro = new Livro();
-            livro.setId(id);
-            livrosService.deletar(id);
-        }catch (LivroNaoEncontradoException e){
-            return ResponseEntity.notFound().build();
-        }
+        livrosService.deletar(id);
         return ResponseEntity.noContent().build();
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public ResponseEntity<Void> atualizar(@RequestBody Livro livro, @PathVariable("id") Long id){
         livro.setId(id); // garantir que quem vai ser atualizado é o recurso do ID desejado
-        try{
-            livrosService.atualizar(livro); //  se ja existe no banco, o metodo save atualizada, se nao, ele cria
-        }catch(LivroNaoEncontradoException e){
-            return ResponseEntity.notFound().build();
-        }
+        livrosService.atualizar(livro);
         return ResponseEntity.noContent().build();
     }
 }
