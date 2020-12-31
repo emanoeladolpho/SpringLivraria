@@ -1,5 +1,6 @@
 package com.emanoel.socialbook.resource;
 
+import com.emanoel.socialbook.domain.Comentario;
 import com.emanoel.socialbook.domain.Livro;
 import com.emanoel.socialbook.services.LivroService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,5 +56,13 @@ public class LivrosResource {
         livro.setId(id); // garantir que quem vai ser atualizado é o recurso do ID desejado
         livrosService.atualizar(livro);
         return ResponseEntity.noContent().build();
+    }
+
+    @RequestMapping(value = "/{id}/comentarios", method = RequestMethod.POST)
+    public ResponseEntity<Void> adicionarComentario(@PathVariable("id") Long livroId, @RequestBody Comentario comentario){
+        livrosService.salvarComentario(livroId,comentario);
+
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
+        return ResponseEntity.created(uri).build();
     }
 }
