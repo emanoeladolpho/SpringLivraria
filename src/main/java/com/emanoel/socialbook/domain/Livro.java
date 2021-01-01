@@ -16,7 +16,9 @@ public class Livro {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String nome;
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private String autor;
+    @ManyToOne
+    @JoinColumn(name = "AUTOR_ID")
+    private Autor autor;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Date publicacao;
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -35,7 +37,7 @@ public class Livro {
         this.nome = nome;
     }
 
-    public Livro(Long id, String nome, String autor, Date publicacao, String editora, String resumo, List<Comentario> comentarios) {
+    public Livro(Long id, String nome, Autor autor, Date publicacao, String editora, String resumo, List<Comentario> comentarios) {
         this.id = id;
         this.nome = nome;
         this.autor = autor;
@@ -61,11 +63,11 @@ public class Livro {
         this.nome = nome;
     }
 
-    public String getAutor() {
-        return autor;
+    public Autor getAutor() {
+         return autor;
     }
 
-    public void setAutor(String autor) {
+    public void setAutor(Autor autor) {
         this.autor = autor;
     }
 
