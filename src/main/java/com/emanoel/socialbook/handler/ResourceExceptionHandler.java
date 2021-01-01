@@ -1,6 +1,8 @@
 package com.emanoel.socialbook.handler;
 
 import com.emanoel.socialbook.domain.DetalhesErro;
+import com.emanoel.socialbook.services.exceptions.AutorExistenteException;
+import com.emanoel.socialbook.services.exceptions.AutorNaoEncontradoException;
 import com.emanoel.socialbook.services.exceptions.LivroNaoEncontradoException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,4 +23,29 @@ public class ResourceExceptionHandler {
         erro.setTimeStamp(System.currentTimeMillis());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro);
     }
+
+        @ExceptionHandler(AutorExistenteException.class)
+        public ResponseEntity<DetalhesErro> handlerAutorExistenteException
+                (AutorExistenteException e, HttpServletRequest request){
+
+        DetalhesErro erro = new DetalhesErro();
+        erro.setStatus(409L);
+        erro.setTitulo("Autor já existete!");
+        erro.setMensagemDesenvolvedor("http://erros.socialbook.com/409");
+        erro.setTimeStamp(System.currentTimeMillis());
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(erro);
+        }
+
+        @ExceptionHandler(AutorNaoEncontradoException.class)
+        public ResponseEntity<DetalhesErro> handleAutorNaoEncontradoException
+                (AutorNaoEncontradoException e, HttpServletRequest request){
+            DetalhesErro erro = new DetalhesErro();
+            erro.setStatus(404L);
+            erro.setTitulo("O autor não pode ser encontrado!");
+            erro.setMensagemDesenvolvedor("http://erros.socialbooks.com/404");
+            erro.setTimeStamp(System.currentTimeMillis());
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro);
+        }
 }
