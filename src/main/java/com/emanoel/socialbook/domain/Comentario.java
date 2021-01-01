@@ -1,6 +1,8 @@
 package com.emanoel.socialbook.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -11,9 +13,16 @@ public class Comentario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String texto;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String usuario;
+
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Date data;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "LIVRO_ID")
     @JsonIgnore // para evitar estouro de pilha. A partir de um livro e possível chegar nos comentarios, mas nao o contrario

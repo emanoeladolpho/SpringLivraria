@@ -1,5 +1,6 @@
 package com.emanoel.socialbook.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import javax.persistence.*;
@@ -13,20 +14,27 @@ public class Livro {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Long id;
+
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String nome;
+
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    @ManyToOne
+    @ManyToOne // tipo de relacionamento
     @JoinColumn(name = "AUTOR_ID")
     private Autor autor;
+
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonFormat(pattern = "dd/MM/yyyy") // setar o formato de exibicao da data
     private Date publicacao;
+
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String editora;
+
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String resumo;
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    @OneToMany(mappedBy = "livro")
+
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @OneToMany(mappedBy = "livro") // tipo de relacionamento
     private List<Comentario> comentarios;
 
     public Livro(){
