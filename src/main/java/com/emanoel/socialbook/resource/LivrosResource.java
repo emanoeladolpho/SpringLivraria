@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class LivrosResource {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<Void> salvar(@RequestBody Livro livro){
+    public ResponseEntity<Void> salvar(@Valid @RequestBody Livro livro){
         // RequestBody é pra dizer que deve ser pego as informacoes na requisicao e coloca ela dentro do parametro
         // Se ele nao for colocado, nao é possivel obter as informacoes do objeto livro
         livro = livrosService.salvar(livro);

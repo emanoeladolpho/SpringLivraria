@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.List;
 
@@ -16,6 +19,7 @@ public class Livro {
     private Long id;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    @NotEmpty(message = "O campo nome é não pode ser vazio!")
     private String nome;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -25,12 +29,16 @@ public class Livro {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonFormat(pattern = "dd/MM/yyyy") // setar o formato de exibicao da data
+    @NotNull(message = "Campo publicação é de preenchimento obrigatório")
     private Date publicacao;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    @NotNull(message = "Campo editora é de preenchimento obrigatório!")
     private String editora;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    @NotEmpty(message = "O resumento deve ser preenchido")
+    @Size(max = 1500, message = "O resumo não pode conter mais de 1500 caracteres!")
     private String resumo;
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
