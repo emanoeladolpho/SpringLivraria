@@ -4,6 +4,7 @@ import com.emanoel.socialbook.domain.Autor;
 import com.emanoel.socialbook.services.AutoresService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -19,7 +20,10 @@ public class AutoresResource{
     @Autowired
     private AutoresService autoresService;
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET,produces = {
+            MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE
+    })
+    // parametro produces serve para indicar quais os tipos de formatos de dados que a API aceita
     public ResponseEntity<List<Autor>> listar(){
         return ResponseEntity.status(HttpStatus.OK).body(autoresService.listar());
     }
@@ -38,5 +42,4 @@ public class AutoresResource{
     public ResponseEntity<Autor> buscar(@PathVariable("id") Long id){
         return ResponseEntity.status(HttpStatus.OK).body(autoresService.buscar(id));
     }
-
 }
