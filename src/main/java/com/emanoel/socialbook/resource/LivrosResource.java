@@ -4,6 +4,7 @@ import com.emanoel.socialbook.domain.Comentario;
 import com.emanoel.socialbook.domain.Livro;
 import com.emanoel.socialbook.services.LivroService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/livros") //  isso quer dizer que qualquer metodo que tiver dentro dessa classe vai ter a URI 'livros' previamente
@@ -40,10 +42,13 @@ public class LivrosResource {
     @RequestMapping (value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<?> buscar(@PathVariable("id") Long id){
         Livro livro = livrosService.buscar(id);
+        CacheControl cacheControl = CacheControl.maxAge(20, TimeUnit.SECONDS); //  Deve ser usado apenas no método GET
+        // O objeto timeControler permite setar qual o tempo de expieração da informação
+        // ou seja, quando tempo essa informacao vai ficar disponivel pra uma proxima busca
         // ResponseEntity é um objeto que encapsula o nosso objeto de retorno, e tbm permite manipular informações do HTTP
         // Como manipular o código de respostas, por exemplo
-        // A interrogação significa que ele pode encapsular qualquer tipo de objeto
-        return ResponseEntity.status(HttpStatus.OK).body(livro); // setando a respota e qual vai ser o objeto retornado
+        // A interrogação significa que ele pode encapsular qualquer tipo de postobjeto
+        return ResponseEntity.status(HttpStatus.OK).cacheControl(cacheControl).body(livro); // setando a respota e qual vai ser o objeto retornado
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
