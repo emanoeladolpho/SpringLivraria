@@ -4,9 +4,12 @@ import com.emanoel.socialbook.domain.Comentario;
 import com.emanoel.socialbook.domain.Livro;
 import com.emanoel.socialbook.services.LivroService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -34,7 +37,6 @@ public class LivrosResource {
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}").buildAndExpand(livro.getId()).toUri();
-
         // o void dentro de ResponseEntity indica que ele nao vai retornar nenhum corpo
         return ResponseEntity.created(uri).build(); // retorna a resposta com o formato 'created' pra indicar que um recurso foi criado com o POST
     }
@@ -66,6 +68,8 @@ public class LivrosResource {
 
     @RequestMapping(value = "/{id}/comentarios", method = RequestMethod.POST)
     public ResponseEntity<Void> adicionarComentario(@PathVariable("id") Long livroId, @RequestBody Comentario comentario){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication(); // Serve para pegar o usuario que foi autenticado
+        comentario.setUsuario(auth.getName()); // consegue pegar o usuario que está conectado no momento na API
         livrosService.salvarComentario(livroId,comentario);
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();

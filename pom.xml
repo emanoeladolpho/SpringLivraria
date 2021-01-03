@@ -58,12 +58,16 @@
             <artifactId>javax.el</artifactId>
             <version>3.0.0</version>
         </dependency>
-
-    <!--        Essa dependencia permite que seja possivel tratar dados do tipo XML-->
+    <!--Essa dependencia permite que seja possivel tratar dados do tipo XML-->
         <dependency>
             <groupId>com.fasterxml.jackson.dataformat</groupId>
             <artifactId>jackson-dataformat-xml</artifactId>
             <version>2.11.3</version>
+        </dependency>
+    <!--Depende do spring security-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
     </dependencies>
 
